@@ -9,7 +9,9 @@
     "build": "rm -Rf dist/**/* && tsc && gcp -rf -t dist package.json"
   },
   "dependencies": {
-    "@co.mmons/node-utils": "git+https://github.com/co-mmons/node-utils.git",
+    "@co.mmons/node-utils": "git+https://github.com/co-mmons/node-utils.git"
+  },
+  "peerDependencies": {
     "rxjs": "^5.5.0"
   },
   "devDependencies": {

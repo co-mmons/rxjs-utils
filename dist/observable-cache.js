@@ -129,6 +129,14 @@ var ObservableCache = /** @class */ (function () {
         }
         this.observers.length = 0;
     };
+    ObservableCache.prototype.subscribe = function (observerOrNext, error, complete) {
+        if (typeof observerOrNext == "function") {
+            return this.observable().subscribe(observerOrNext, error, complete);
+        }
+        else {
+            return this.observable().subscribe(observerOrNext);
+        }
+    };
     ObservableCache.prototype.unsubscribe = function () {
         this.destroy();
     };

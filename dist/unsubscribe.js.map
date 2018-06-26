@@ -1,0 +1,1 @@
+{"version":3,"file":"unsubscribe.js","sourceRoot":"","sources":["../src/unsubscribe.ts"],"names":[],"mappings":";;AAGA,qBAA4B,YAA+E;IAEvG,IAAI,YAAY,EAAE;QACd,IAAI,OAAO,YAAY,IAAI,UAAU,EAAE;YACnC,YAAY,EAAE,CAAC;SAClB;aAAM;YACH,YAAY,CAAC,WAAW,EAAE,CAAC;SAC9B;KACJ;AACL,CAAC;AATD,kCASC"}

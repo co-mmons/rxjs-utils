@@ -2,7 +2,7 @@ import {Observable} from "rxjs/Observable";
 import {Subject} from "rxjs/Subject";
 import {Subscriber} from "rxjs/Subscriber";
 import {ISubscription, Subscription, TeardownLogic} from "rxjs/Subscription";
-import {Observer} from "rxjs/Observer";
+import {Observer, PartialObserver} from "rxjs/Observer";
 
 class CachedObservable extends Subject<any> {
 
@@ -151,6 +151,16 @@ export class ObservableCache {
         }
 
         this.observers.length = 0;
+    }
+
+    public subscribe(observer?: PartialObserver<any>): Subscription;
+
+    public subscribe(observerOrNext?: PartialObserver<any> | ((value: any) => void), error?: (error: any) => void, complete?: () => void): Subscription {
+        if (typeof observerOrNext == "function") {
+            return this.observable().subscribe(observerOrNext, error, complete);
+        } else {
+            return this.observable().subscribe(observerOrNext);
+        }
     }
 
     public unsubscribe() {

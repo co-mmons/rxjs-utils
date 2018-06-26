@@ -1,6 +1,6 @@
 import { Observable } from "rxjs/Observable";
 import { Subscription } from "rxjs/Subscription";
-import { Observer } from "rxjs/Observer";
+import { Observer, PartialObserver } from "rxjs/Observer";
 export declare class ObservableCache {
     protected readonly sourceFactory: () => Observable<any>;
     constructor(sourceFactory: () => Observable<any>);
@@ -19,5 +19,6 @@ export declare class ObservableCache {
     protected onSourceError(error: any): void;
     protected onSourceComplete(): void;
     destroy(): void;
+    subscribe(observer?: PartialObserver<any>): Subscription;
     unsubscribe(): void;
 }
