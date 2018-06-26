@@ -1,9 +1,18 @@
 import {Subject} from "rxjs/Subject";
 import {Subscription} from "rxjs/Subscription";
 
-export function unsubscribe(subscription: Function | Subscription | Subject<any> | {unsubscribe: () => any}) {
+type Unsubscribable = Function | Subscription | Subject<any> | {unsubscribe: () => any};
 
-    if (subscription) {
+export function unsubscribe(subscription: Unsubscribable | Unsubscribable[]) {
+
+    if (Array.isArray(subscription)) {
+        
+        for (let s of subscription) {
+            unsubscribe(s);
+        }
+
+    } else if (subscription) {
+        
         if (typeof subscription == "function") {
             subscription();
         } else {
