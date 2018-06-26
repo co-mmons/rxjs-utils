@@ -1,24 +1,25 @@
 import { Observable } from "rxjs/Observable";
 import { Subscription } from "rxjs/Subscription";
 import { Observer, PartialObserver } from "rxjs/Observer";
-export declare class ObservableCache {
-    protected readonly sourceFactory: () => Observable<any>;
-    constructor(sourceFactory: () => Observable<any>);
-    protected source: Observable<any>;
+export declare class ObservableCache<T = any> {
+    protected readonly sourceFactory: () => Observable<T>;
+    constructor(sourceFactory: () => Observable<T>);
+    protected source: Observable<T>;
     protected sourceSubscription: Subscription;
     protected value: any;
     protected hasValue: boolean;
     private observers;
-    observable(): Observable<any>;
-    protected pushObserver(observable: Observer<any>): void;
-    protected pullObserver(observer: Observer<any>): void;
+    observable(): Observable<T>;
+    protected pushObserver(observable: Observer<T>): void;
+    protected pullObserver(observer: Observer<T>): void;
     protected readonly initialized: boolean;
     protected initialize(): void;
     protected destroySource(): void;
-    protected onSourceNext(value: any): void;
+    protected onSourceNext(value: T): void;
     protected onSourceError(error: any): void;
     protected onSourceComplete(): void;
     destroy(): void;
-    subscribe(observer?: PartialObserver<any>): Subscription;
+    subscribe(observer?: PartialObserver<T>): Subscription;
+    subscribe(next?: (value: T) => void, error?: (error: any) => void, complete?: () => void): Subscription;
     unsubscribe(): void;
 }

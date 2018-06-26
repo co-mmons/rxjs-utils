@@ -4,13 +4,13 @@ import {Subscriber} from "rxjs/Subscriber";
 import {ISubscription, Subscription, TeardownLogic} from "rxjs/Subscription";
 import {Observer, PartialObserver} from "rxjs/Observer";
 
-class CachedObservable extends Subject<any> {
+class CachedObservable<T> extends Subject<T> {
 
     constructor(private factory: ObservableCache) {
         super();
     }
 
-    _trySubscribe(subscriber: Subscriber<any>): TeardownLogic {
+    _trySubscribe(subscriber: Subscriber<T>): TeardownLogic {
         let subscription: TeardownLogic = super._trySubscribe(subscriber);
 
         if (subscription && (!("closed" in subscription) || !(<ISubscription>subscription).closed)) {
@@ -35,13 +35,13 @@ class CachedObservable extends Subject<any> {
 }
 
 
-export class ObservableCache {
+export class ObservableCache<T = any> {
 
-    constructor(protected readonly sourceFactory: () => Observable<any>) {
+    constructor(protected readonly sourceFactory: () => Observable<T>) {
     }
 
     
-    protected source: Observable<any>;
+    protected source: Observable<T>;
 
     protected sourceSubscription: Subscription;
 
@@ -49,18 +49,18 @@ export class ObservableCache {
 
     protected hasValue: boolean = false;
 
-    private observers: Observer<any>[] = [];
+    private observers: Observer<T>[] = [];
 
 
-    public observable(): Observable<any> {
+    public observable(): Observable<T> {
         return new CachedObservable(this);
     }
 
-    protected pushObserver(observable: Observer<any>) {
+    protected pushObserver(observable: Observer<T>) {
         this.observers.push(observable);
     }
 
-    protected pullObserver(observer: Observer<any>) {
+    protected pullObserver(observer: Observer<T>) {
         for (let i = this.observers.length; i >= 0; i--) {
             if (this.observers[i] === observer) {
                 this.observers.splice(i, 1);
@@ -99,7 +99,7 @@ export class ObservableCache {
         this.hasValue = false;
     }
 
-    protected onSourceNext(value: any) {
+    protected onSourceNext(value: T) {
         let changed = !this.hasValue ? true : (JSON.stringify(value) != JSON.stringify(this.value));
 
         this.hasValue = true;
@@ -153,9 +153,11 @@ export class ObservableCache {
         this.observers.length = 0;
     }
 
-    public subscribe(observer?: PartialObserver<any>): Subscription;
+    public subscribe(observer?: PartialObserver<T>): Subscription;
 
-    public subscribe(observerOrNext?: PartialObserver<any> | ((value: any) => void), error?: (error: any) => void, complete?: () => void): Subscription {
+    public subscribe(next?: (value: T) => void, error?: (error: any) => void, complete?: () => void): Subscription;
+
+    public subscribe(observerOrNext?: PartialObserver<T> | ((value: T) => void), error?: (error: any) => void, complete?: () => void): Subscription {
         if (typeof observerOrNext == "function") {
             return this.observable().subscribe(observerOrNext, error, complete);
         } else {
