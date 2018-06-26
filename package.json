@@ -1,0 +1,18 @@
+{
+  "name": "@co.mmons/rjxs-utils",
+  "version": "1.0.0",
+  "author": "co.mmons",
+  "private": false,
+  "license": "MIT",
+  "scripts": {
+    "install": "node-utils-npm-install-dist",
+    "build": "rm -Rf dist/**/* && tsc && gcp -rf -t dist package.json"
+  },
+  "dependencies": {
+    "@co.mmons/node-utils": "git+https://github.com/co-mmons/node-utils.git",
+    "rxjs": "^5.5.0"
+  },
+  "devDependencies": {
+    "typescript": "^2.9.0"
+  }
+}
