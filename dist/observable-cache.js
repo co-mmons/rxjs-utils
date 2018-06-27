@@ -11,6 +11,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var Subject_1 = require("rxjs/Subject");
+var Subscription_1 = require("rxjs/Subscription");
 var CachedObservable = /** @class */ (function (_super) {
     __extends(CachedObservable, _super);
     function CachedObservable(factory) {
@@ -19,6 +20,7 @@ var CachedObservable = /** @class */ (function (_super) {
         return _this;
     }
     CachedObservable.prototype._trySubscribe = function (subscriber) {
+        var _this = this;
         var subscription = _super.prototype._trySubscribe.call(this, subscriber);
         if (subscription && (!("closed" in subscription) || !subscription.closed)) {
             this.factory["pushObserver"](this);
@@ -28,8 +30,16 @@ var CachedObservable = /** @class */ (function (_super) {
             else if (this.factory["hasValue"]) {
                 subscriber.next(this.factory["value"]);
             }
+            var niu = new Subscription_1.Subscription(function () { return _this.subscriptionClosed(); });
+            niu.add(subscription);
+            subscription = niu;
         }
         return subscription;
+    };
+    CachedObservable.prototype.subscriptionClosed = function () {
+        if (this.observers.length == 0) {
+            this.factory["pullObserver"](this);
+        }
     };
     CachedObservable.prototype.unsubscribe = function () {
         _super.prototype.unsubscribe.call(this);
@@ -46,8 +56,14 @@ var ObservableCache = /** @class */ (function () {
     ObservableCache.prototype.observable = function () {
         return new CachedObservable(this);
     };
-    ObservableCache.prototype.pushObserver = function (observable) {
-        this.observers.push(observable);
+    ObservableCache.prototype.pushObserver = function (observer) {
+        for (var _i = 0, _a = this.observers; _i < _a.length; _i++) {
+            var o = _a[_i];
+            if (o === observer) {
+                return;
+            }
+        }
+        this.observers.push(observer);
     };
     ObservableCache.prototype.pullObserver = function (observer) {
         for (var i = this.observers.length; i >= 0; i--) {

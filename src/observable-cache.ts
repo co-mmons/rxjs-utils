@@ -23,9 +23,19 @@ class CachedObservable<T> extends Subject<T> {
             } else if (this.factory["hasValue"]) {
                 subscriber.next(this.factory["value"]);
             }
+
+            let niu = new Subscription(() => this.subscriptionClosed());
+            niu.add(subscription);
+            subscription = niu;
         }
 
         return subscription;
+    }
+
+    private subscriptionClosed() {
+        if (this.observers.length == 0) {
+            this.factory["pullObserver"](this);
+        }
     }
 
     unsubscribe(): void {
@@ -56,8 +66,15 @@ export class ObservableCache<T = any> {
         return new CachedObservable(this);
     }
 
-    protected pushObserver(observable: Observer<T>) {
-        this.observers.push(observable);
+    protected pushObserver(observer: Observer<T>) {
+
+        for (let o of this.observers) {
+            if (o === observer) {
+                return;
+            }
+        }
+
+        this.observers.push(observer);
     }
 
     protected pullObserver(observer: Observer<T>) {
