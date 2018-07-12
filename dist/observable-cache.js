@@ -10,8 +10,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var Subject_1 = require("rxjs/Subject");
-var Subscription_1 = require("rxjs/Subscription");
+var rxjs_1 = require("rxjs");
 var CachedObservable = /** @class */ (function (_super) {
     __extends(CachedObservable, _super);
     function CachedObservable(factory) {
@@ -22,7 +21,7 @@ var CachedObservable = /** @class */ (function (_super) {
     CachedObservable.prototype._trySubscribe = function (subscriber) {
         var _this = this;
         var subscription = _super.prototype._trySubscribe.call(this, subscriber);
-        if (subscription && (!("closed" in subscription) || !subscription.closed)) {
+        if (subscription && !subscription.closed) {
             this.factory["pushObserver"](this);
             if (!this.factory["initialized"]) {
                 this.factory["initialize"]();
@@ -30,7 +29,7 @@ var CachedObservable = /** @class */ (function (_super) {
             else if (this.factory["hasValue"]) {
                 subscriber.next(this.factory["value"]);
             }
-            var niu = new Subscription_1.Subscription(function () { return _this.subscriptionClosed(); });
+            var niu = new rxjs_1.Subscription(function () { return _this.subscriptionClosed(); });
             niu.add(subscription);
             subscription = niu;
         }
@@ -46,7 +45,7 @@ var CachedObservable = /** @class */ (function (_super) {
         this.factory["pullObserver"](this);
     };
     return CachedObservable;
-}(Subject_1.Subject));
+}(rxjs_1.Subject));
 var ObservableCache = /** @class */ (function () {
     function ObservableCache(sourceFactory) {
         this.sourceFactory = sourceFactory;

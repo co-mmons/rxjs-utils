@@ -1,5 +1,4 @@
-import { Subject } from "rxjs/Subject";
-import { Subscription } from "rxjs/Subscription";
+import { Subject, Subscription } from "rxjs";
 declare type Unsubscribable = Function | Subscription | Subject<any> | {
     unsubscribe: () => any;
 };

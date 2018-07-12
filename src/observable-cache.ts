@@ -1,8 +1,4 @@
-import {Observable} from "rxjs/Observable";
-import {Subject} from "rxjs/Subject";
-import {Subscriber} from "rxjs/Subscriber";
-import {ISubscription, Subscription, TeardownLogic} from "rxjs/Subscription";
-import {Observer, PartialObserver} from "rxjs/Observer";
+import {Observable, Subject, Subscriber, Subscription, SubscriptionLike, TeardownLogic, Observer, PartialObserver} from "rxjs";
 
 class CachedObservable<T> extends Subject<T> {
 
@@ -13,7 +9,7 @@ class CachedObservable<T> extends Subject<T> {
     _trySubscribe(subscriber: Subscriber<T>): TeardownLogic {
         let subscription: TeardownLogic = super._trySubscribe(subscriber);
 
-        if (subscription && (!("closed" in subscription) || !(<ISubscription>subscription).closed)) {
+        if (subscription && !(<SubscriptionLike>subscription).closed) {
 
             this.factory["pushObserver"](this);
 

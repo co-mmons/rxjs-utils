@@ -1,6 +1,4 @@
-import { Observable } from "rxjs/Observable";
-import { Subscription } from "rxjs/Subscription";
-import { Observer, PartialObserver } from "rxjs/Observer";
+import { Observable, Subscription, Observer, PartialObserver } from "rxjs";
 export declare class ObservableCache<T = any> {
     protected readonly sourceFactory: () => Observable<T>;
     constructor(sourceFactory: () => Observable<T>);

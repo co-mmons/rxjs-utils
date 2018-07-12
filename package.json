@@ -12,9 +12,9 @@
     "@co.mmons/node-utils": "git+https://github.com/co-mmons/node-utils.git"
   },
   "peerDependencies": {
-    "rxjs": "^5.5.0"
+    "rxjs": "^6.2.1"
   },
   "devDependencies": {
-    "typescript": "^2.9.0"
+    "typescript": "^2.8.0"
   }
 }
