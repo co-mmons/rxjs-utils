@@ -9,12 +9,13 @@
     "build": "rm -Rf dist/**/* && tsc && gcp -rf -t dist package.json"
   },
   "dependencies": {
-    "@co.mmons/node-utils": "git+https://github.com/co-mmons/node-utils.git"
+    "@co.mmons/node-utils": "git+https://github.com/co-mmons/node-utils.git",
+    "arr-flatten": "^1.1.0"
   },
   "peerDependencies": {
     "rxjs": "^6.2.1"
   },
   "devDependencies": {
-    "typescript": "^2.8.0"
+    "typescript": "~2.7.0"
   }
 }

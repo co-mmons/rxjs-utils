@@ -1,6 +1,6 @@
 import {Subject, Subscription} from "rxjs";
 
-type Unsubscribable = Function | Subscription | Subject<any> | {unsubscribe: () => any};
+export type Unsubscribable = Function | Subscription | Subject<any> | {unsubscribe: () => any};
 
 export function unsubscribe(subscription: Unsubscribable | Unsubscribable[]) {
 
