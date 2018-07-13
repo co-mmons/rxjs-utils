@@ -1,14 +1,11 @@
 import {MonoTypeOperatorFunction, Observable, Operator, Subscriber} from "rxjs";
 
-function silentTimeoutImpl<T>(timeout: number, onTimeout: () => void): MonoTypeOperatorFunction<T> {
+export function silentTimeout<T>(timeout: number, onTimeout: () => void): MonoTypeOperatorFunction<T> {
     return function (source: Observable<T>): Observable<T> {
         return source.lift(new SilentTimeoutOperator(timeout, onTimeout));
     };
 }
 
-export function silentTimeout<T>(this: Observable<T>, timeout: number, onTimeout: () => void): Observable<T> {
-    return silentTimeoutImpl<T>(timeout, onTimeout)(this);
-}
 
 class SilentTimeoutOperator<T> implements Operator<T, T> {
     constructor(private timeout: number, private timeoutCallback: () => void) {

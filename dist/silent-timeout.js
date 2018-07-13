@@ -11,13 +11,10 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var rxjs_1 = require("rxjs");
-function silentTimeoutImpl(timeout, onTimeout) {
+function silentTimeout(timeout, onTimeout) {
     return function (source) {
         return source.lift(new SilentTimeoutOperator(timeout, onTimeout));
     };
-}
-function silentTimeout(timeout, onTimeout) {
-    return silentTimeoutImpl(timeout, onTimeout)(this);
 }
 exports.silentTimeout = silentTimeout;
 var SilentTimeoutOperator = /** @class */ (function () {

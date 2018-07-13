@@ -1,2 +1,2 @@
-import { Observable } from "rxjs";
-export declare function silentTimeout<T>(this: Observable<T>, timeout: number, onTimeout: () => void): Observable<T>;
+import { MonoTypeOperatorFunction } from "rxjs";
+export declare function silentTimeout<T>(timeout: number, onTimeout: () => void): MonoTypeOperatorFunction<T>;
