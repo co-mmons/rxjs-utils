@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "install": "node-utils-npm-install-dist",
-    "build": "rm -Rf dist/**/* && tsc && gcp -rf -t dist package.json"
+    "build": "node-utils-file-system-glob-delete \"dist/**/*\" && tsc && tsc -p tsconfig.esm.json && node-utils-file-system-glob-rename .js .mjs \"dist/esm/**/*\" && node-utils-file-system-glob-copy dist/esm dist \"**/*\" && node-utils-file-system-glob-delete dist/esm && node-utils-file-system-glob-copy ./ dist package.json"
   },
   "dependencies": {
     "@co.mmons/node-utils": "git+https://github.com/co-mmons/node-utils.git",
@@ -16,6 +16,7 @@
     "rxjs": "^6.2.1"
   },
   "devDependencies": {
-    "typescript": "~2.7.0"
-  }
+    "typescript": "^2.9.2"
+  },
+  "sideEffects": "false"
 }
