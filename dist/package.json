@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "install": "node-utils-npm-install-dist",
-    "build": "node-utils-file-system-glob-delete \"dist/**/*\" && tsc && tsc -p tsconfig.esm.json && node-utils-file-system-glob-rename .js .mjs \"dist/esm/**/*\" && node-utils-file-system-glob-copy dist/esm dist \"**/*\" && node-utils-file-system-glob-delete dist/esm && node-utils-file-system-glob-copy ./ dist package.json"
+    "build": "node-utils-file-system-glob-delete \"dist/**/*\" && tsc && tsc -p tsconfig.esm.json && node-utils-file-system-glob-copy ./ dist package.json && node-utils-file-system-glob-copy src dist \"**/package.json\""
   },
   "dependencies": {
     "@co.mmons/node-utils": "git+https://github.com/co-mmons/node-utils.git",
@@ -18,5 +18,7 @@
   "devDependencies": {
     "typescript": "^2.9.2"
   },
-  "sideEffects": "false"
+  "sideEffects": "false",
+  "main": "index.js",
+  "module": "esm/index.js"
 }
