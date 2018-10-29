@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var rxjs_1 = require("rxjs");
 var operators_1 = require("rxjs/operators");
-function namedCombinedLatest(namedObservables) {
+function namedCombineLatest(namedObservables) {
     var observables = [];
     var keyByIndex = {};
     var index = -1;
@@ -18,5 +18,5 @@ function namedCombinedLatest(namedObservables) {
         return namedResult;
     }));
 }
-exports.namedCombinedLatest = namedCombinedLatest;
+exports.namedCombineLatest = namedCombineLatest;
 //# sourceMappingURL=named-combine-latest.js.map

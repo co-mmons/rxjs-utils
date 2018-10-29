@@ -1,6 +1,6 @@
 import { combineLatest } from "rxjs";
 import { map } from "rxjs/operators";
-export function namedCombinedLatest(namedObservables) {
+export function namedCombineLatest(namedObservables) {
     var observables = [];
     var keyByIndex = {};
     var index = -1;
