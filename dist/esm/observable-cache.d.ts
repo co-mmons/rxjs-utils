@@ -1,7 +1,8 @@
 import { Observable, Subscription, Observer, PartialObserver } from "rxjs";
 export declare class ObservableCache<T = any> {
     protected readonly sourceFactory: () => Observable<T>;
-    constructor(sourceFactory: () => Observable<T>);
+    readonly id?: any;
+    constructor(sourceFactory: () => Observable<T>, id?: any);
     protected source: Observable<T>;
     protected sourceSubscription: Subscription;
     protected value: any;

@@ -43,7 +43,7 @@ class CachedObservable<T> extends Subject<T> {
 
 export class ObservableCache<T = any> {
 
-    constructor(protected readonly sourceFactory: () => Observable<T>) {
+    constructor(protected readonly sourceFactory: () => Observable<T>, public readonly id?: any) {
     }
 
     

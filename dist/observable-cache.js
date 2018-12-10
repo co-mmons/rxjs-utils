@@ -47,8 +47,9 @@ var CachedObservable = /** @class */ (function (_super) {
     return CachedObservable;
 }(rxjs_1.Subject));
 var ObservableCache = /** @class */ (function () {
-    function ObservableCache(sourceFactory) {
+    function ObservableCache(sourceFactory, id) {
         this.sourceFactory = sourceFactory;
+        this.id = id;
         this.hasValue = false;
         this.observers = [];
     }
