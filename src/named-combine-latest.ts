@@ -1,7 +1,7 @@
 import {combineLatest, Observable} from "rxjs";
 import {map} from "rxjs/operators";
 
-export function namedCombineLatest<R extends {[key: string]: any}>(namedObservables: {[key: string]: Observable<any>}): Observable<R> {
+export function namedCombineLatest<T extends {[K in keyof T]: T[K]}>(namedObservables: {[K in keyof T]: Observable<T[K]>}): Observable<{[K in keyof T]: T[K]}> {
 
     let observables: Observable<any>[] = [];
     let keyByIndex = {};
