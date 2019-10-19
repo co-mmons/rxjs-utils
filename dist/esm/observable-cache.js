@@ -1,15 +1,11 @@
-import * as tslib_1 from "tslib";
 import { Subject, Subscription } from "rxjs";
-var CachedObservable = /** @class */ (function (_super) {
-    tslib_1.__extends(CachedObservable, _super);
-    function CachedObservable(factory) {
-        var _this = _super.call(this) || this;
-        _this.factory = factory;
-        return _this;
+class CachedObservable extends Subject {
+    constructor(factory) {
+        super();
+        this.factory = factory;
     }
-    CachedObservable.prototype._trySubscribe = function (subscriber) {
-        var _this = this;
-        var subscription = _super.prototype._trySubscribe.call(this, subscriber);
+    _trySubscribe(subscriber) {
+        let subscription = super._trySubscribe(subscriber);
         if (subscription && !subscription.closed) {
             this.factory["pushObserver"](this);
             if (!this.factory["initialized"]) {
@@ -18,69 +14,62 @@ var CachedObservable = /** @class */ (function (_super) {
             else if (this.factory["hasValue"]) {
                 subscriber.next(this.factory["value"]);
             }
-            var niu = new Subscription(function () { return _this.subscriptionClosed(); });
+            let niu = new Subscription(() => this.subscriptionClosed());
             niu.add(subscription);
             subscription = niu;
         }
         return subscription;
-    };
-    CachedObservable.prototype.subscriptionClosed = function () {
+    }
+    subscriptionClosed() {
         if (this.observers.length == 0) {
             this.factory["pullObserver"](this);
         }
-    };
-    CachedObservable.prototype.unsubscribe = function () {
-        _super.prototype.unsubscribe.call(this);
+    }
+    unsubscribe() {
+        super.unsubscribe();
         this.factory["pullObserver"](this);
-    };
-    return CachedObservable;
-}(Subject));
-var ObservableCache = /** @class */ (function () {
-    function ObservableCache(sourceFactory, id) {
+    }
+}
+export class ObservableCache {
+    constructor(sourceFactory, id) {
         this.sourceFactory = sourceFactory;
         this.id = id;
         this.hasValue = false;
         this.observers = [];
     }
-    ObservableCache.prototype.observable = function () {
+    observable() {
         return new CachedObservable(this);
-    };
-    ObservableCache.prototype.pushObserver = function (observer) {
-        for (var _i = 0, _a = this.observers; _i < _a.length; _i++) {
-            var o = _a[_i];
+    }
+    pushObserver(observer) {
+        for (let o of this.observers) {
             if (o === observer) {
                 return;
             }
         }
         this.observers.push(observer);
-    };
-    ObservableCache.prototype.pullObserver = function (observer) {
-        for (var i = this.observers.length; i >= 0; i--) {
+    }
+    pullObserver(observer) {
+        for (let i = this.observers.length; i >= 0; i--) {
             if (this.observers[i] === observer) {
                 this.observers.splice(i, 1);
             }
         }
-    };
-    Object.defineProperty(ObservableCache.prototype, "initialized", {
-        get: function () {
-            if (this.source) {
-                return true;
-            }
-            return false;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    ObservableCache.prototype.initialize = function () {
-        var _this = this;
+    }
+    get initialized() {
+        if (this.source) {
+            return true;
+        }
+        return false;
+    }
+    initialize() {
         if (!this.source) {
             this.source = this.sourceFactory();
             this.value = undefined;
             this.hasValue = false;
-            this.sourceSubscription = this.source.subscribe(function (value) { return _this.onSourceNext(value); }, function (error) { return _this.onSourceError(error); }, function () { return _this.onSourceComplete(); });
+            this.sourceSubscription = this.source.subscribe(value => this.onSourceNext(value), error => this.onSourceError(error), () => this.onSourceComplete());
         }
-    };
-    ObservableCache.prototype.destroySource = function () {
+    }
+    destroySource() {
         if (this.sourceSubscription) {
             this.sourceSubscription.unsubscribe();
         }
@@ -88,64 +77,58 @@ var ObservableCache = /** @class */ (function () {
         this.source = undefined;
         this.value = undefined;
         this.hasValue = false;
-    };
-    ObservableCache.prototype.onSourceNext = function (value) {
-        var changed = !this.hasValue ? true : (JSON.stringify(value) != JSON.stringify(this.value));
+    }
+    onSourceNext(value) {
+        let changed = !this.hasValue ? true : (JSON.stringify(value) != JSON.stringify(this.value));
         this.hasValue = true;
         this.value = value;
-        var observers = this.observers.slice();
+        let observers = this.observers.slice();
         if (observers.length && changed) {
-            for (var _i = 0, observers_1 = observers; _i < observers_1.length; _i++) {
-                var o = observers_1[_i];
+            for (let o of observers) {
                 o.next(value);
             }
         }
-    };
-    ObservableCache.prototype.onSourceError = function (error) {
+    }
+    onSourceError(error) {
         this.destroySource();
-        var observers = this.observers.slice();
+        let observers = this.observers.slice();
         if (observers.length) {
-            for (var _i = 0, observers_2 = observers; _i < observers_2.length; _i++) {
-                var o = observers_2[_i];
+            for (let o of observers) {
                 o.error(error);
             }
         }
         this.observers.length = 0;
-    };
-    ObservableCache.prototype.onSourceComplete = function () {
+    }
+    onSourceComplete() {
         this.destroySource();
-        var observers = this.observers.slice();
+        let observers = this.observers.slice();
         if (observers.length) {
-            for (var _i = 0, observers_3 = observers; _i < observers_3.length; _i++) {
-                var o = observers_3[_i];
+            for (let o of observers) {
                 o.complete();
             }
         }
         this.observers.length = 0;
-    };
-    ObservableCache.prototype.destroy = function () {
+    }
+    destroy() {
         this.destroySource();
-        var observers = this.observers.slice();
+        let observers = this.observers.slice();
         if (observers.length) {
-            for (var _i = 0, observers_4 = observers; _i < observers_4.length; _i++) {
-                var o = observers_4[_i];
+            for (let o of observers) {
                 o.complete();
             }
         }
         this.observers.length = 0;
-    };
-    ObservableCache.prototype.subscribe = function (observerOrNext, error, complete) {
+    }
+    subscribe(observerOrNext, error, complete) {
         if (typeof observerOrNext == "function") {
             return this.observable().subscribe(observerOrNext, error, complete);
         }
         else {
             return this.observable().subscribe(observerOrNext);
         }
-    };
-    ObservableCache.prototype.unsubscribe = function () {
+    }
+    unsubscribe() {
         this.destroy();
-    };
-    return ObservableCache;
-}());
-export { ObservableCache };
+    }
+}
 //# sourceMappingURL=observable-cache.js.map

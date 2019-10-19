@@ -7,10 +7,11 @@
         "lib": ["dom", "es2015"],
         "module": "commonjs",
         "moduleResolution": "node",
-        "target": "es5",
+        "target": "es2015",
         "outDir": "dist",
         "rootDir": "src",
-        "sourceMap": true
+        "sourceMap": true,
+        "importHelpers": true
     },
 
     "exclude": [

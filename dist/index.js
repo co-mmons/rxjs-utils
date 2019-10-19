@@ -1,12 +1,10 @@
 "use strict";
-function __export(m) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
-}
 Object.defineProperty(exports, "__esModule", { value: true });
-__export(require("./flat-combine-latest"));
-__export(require("./named-combine-latest"));
-__export(require("./observable-cache"));
-__export(require("./pausable-interval"));
-__export(require("./silent-timeout"));
-__export(require("./unsubscribe"));
+const tslib_1 = require("tslib");
+tslib_1.__exportStar(require("./flat-combine-latest"), exports);
+tslib_1.__exportStar(require("./named-combine-latest"), exports);
+tslib_1.__exportStar(require("./observable-cache"), exports);
+tslib_1.__exportStar(require("./pausable-interval"), exports);
+tslib_1.__exportStar(require("./silent-timeout"), exports);
+tslib_1.__exportStar(require("./unsubscribe"), exports);
 //# sourceMappingURL=index.js.map
