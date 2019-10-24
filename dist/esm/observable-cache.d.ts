@@ -8,6 +8,8 @@ export declare class ObservableCache<T = any> {
     protected value: any;
     protected hasValue: boolean;
     private observers;
+    private _checkEquality;
+    setCheckEquality(value: boolean): this;
     observable(): Observable<T>;
     protected pushObserver(observer: Observer<T>): void;
     protected pullObserver(observer: Observer<T>): void;

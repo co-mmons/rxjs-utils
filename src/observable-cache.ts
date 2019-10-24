@@ -1,3 +1,4 @@
+import {deepEqual} from "fast-equals";
 import {Observable, Subject, Subscriber, Subscription, SubscriptionLike, TeardownLogic, Observer, PartialObserver} from "rxjs";
 
 class CachedObservable<T> extends Subject<T> {
@@ -40,7 +41,6 @@ class CachedObservable<T> extends Subject<T> {
     }
 }
 
-
 export class ObservableCache<T = any> {
 
     constructor(protected readonly sourceFactory: () => Observable<T>, public readonly id?: any) {
@@ -57,6 +57,13 @@ export class ObservableCache<T = any> {
 
     private observers: Observer<T>[] = [];
 
+    private _checkEquality: boolean = true;
+
+
+    public setCheckEquality(value: boolean): this {
+        this._checkEquality = value;
+        return this;
+    }
 
     public observable(): Observable<T> {
         return new CachedObservable(this);
@@ -113,7 +120,7 @@ export class ObservableCache<T = any> {
     }
 
     protected onSourceNext(value: T) {
-        let changed = !this.hasValue ? true : (JSON.stringify(value) != JSON.stringify(this.value));
+        let changed = !this.hasValue ? true : !deepEqual(value, this.value);
 
         this.hasValue = true;
         this.value = value;

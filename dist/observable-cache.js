@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const fast_equals_1 = require("fast-equals");
 const rxjs_1 = require("rxjs");
 class CachedObservable extends rxjs_1.Subject {
     constructor(factory) {
@@ -38,6 +39,11 @@ class ObservableCache {
         this.id = id;
         this.hasValue = false;
         this.observers = [];
+        this._checkEquality = true;
+    }
+    setCheckEquality(value) {
+        this._checkEquality = value;
+        return this;
     }
     observable() {
         return new CachedObservable(this);
@@ -81,7 +87,7 @@ class ObservableCache {
         this.hasValue = false;
     }
     onSourceNext(value) {
-        let changed = !this.hasValue ? true : (JSON.stringify(value) != JSON.stringify(this.value));
+        let changed = !this.hasValue ? true : !fast_equals_1.deepEqual(value, this.value);
         this.hasValue = true;
         this.value = value;
         let observers = this.observers.slice();

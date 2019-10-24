@@ -1,3 +1,4 @@
+import { deepEqual } from "fast-equals";
 import { Subject, Subscription } from "rxjs";
 class CachedObservable extends Subject {
     constructor(factory) {
@@ -36,6 +37,11 @@ export class ObservableCache {
         this.id = id;
         this.hasValue = false;
         this.observers = [];
+        this._checkEquality = true;
+    }
+    setCheckEquality(value) {
+        this._checkEquality = value;
+        return this;
     }
     observable() {
         return new CachedObservable(this);
@@ -79,7 +85,7 @@ export class ObservableCache {
         this.hasValue = false;
     }
     onSourceNext(value) {
-        let changed = !this.hasValue ? true : (JSON.stringify(value) != JSON.stringify(this.value));
+        let changed = !this.hasValue ? true : !deepEqual(value, this.value);
         this.hasValue = true;
         this.value = value;
         let observers = this.observers.slice();

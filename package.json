@@ -10,7 +10,8 @@
   },
   "dependencies": {
     "@co.mmons/node-utils": "git+https://github.com/co-mmons/node-utils.git",
-    "arr-flatten": "^1.1.0"
+    "arr-flatten": "^1.1.0",
+    "fast-equals": "^2.0.0"
   },
   "peerDependencies": {
     "rxjs": "^6.2.1"
