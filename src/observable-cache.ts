@@ -120,7 +120,7 @@ export class ObservableCache<T = any> {
     }
 
     protected onSourceNext(value: T) {
-        let changed = !this.hasValue ? true : !deepEqual(value, this.value);
+        let changed = !this.hasValue || !this._checkEquality ? true : !deepEqual(value, this.value);
 
         this.hasValue = true;
         this.value = value;

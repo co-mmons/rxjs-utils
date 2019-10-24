@@ -87,7 +87,7 @@ class ObservableCache {
         this.hasValue = false;
     }
     onSourceNext(value) {
-        let changed = !this.hasValue ? true : !fast_equals_1.deepEqual(value, this.value);
+        let changed = !this.hasValue || !this._checkEquality ? true : !fast_equals_1.deepEqual(value, this.value);
         this.hasValue = true;
         this.value = value;
         let observers = this.observers.slice();
