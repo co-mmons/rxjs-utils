@@ -62,6 +62,9 @@ class ObservableCache {
                 this.observers.splice(i, 1);
             }
         }
+        if (this.observers.length === 0) {
+            this.destroySource();
+        }
     }
     get initialized() {
         if (this.source) {

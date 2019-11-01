@@ -86,6 +86,10 @@ export class ObservableCache<T = any> {
                 this.observers.splice(i, 1);
             }
         }
+
+        if (this.observers.length === 0) {
+            this.destroySource();
+        }
     }
 
     protected get initialized(): boolean {
