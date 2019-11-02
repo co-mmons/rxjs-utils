@@ -22,13 +22,11 @@ class CachedObservable extends Subject {
         return subscription;
     }
     subscriptionClosed() {
-        if (this.observers.length == 0) {
-            this.factory["pullObserver"](this);
-        }
+        this.factory["pullObserver"](this);
     }
     unsubscribe() {
         super.unsubscribe();
-        this.factory["pullObserver"](this);
+        this.subscriptionClosed();
     }
 }
 export class ObservableCache {

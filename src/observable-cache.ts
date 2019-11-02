@@ -30,14 +30,12 @@ class CachedObservable<T> extends Subject<T> {
     }
 
     private subscriptionClosed() {
-        if (this.observers.length == 0) {
-            this.factory["pullObserver"](this);
-        }
+        this.factory["pullObserver"](this);
     }
 
     unsubscribe(): void {
         super.unsubscribe();
-        this.factory["pullObserver"](this);
+        this.subscriptionClosed();
     }
 }
 
