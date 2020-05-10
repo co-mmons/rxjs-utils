@@ -10,7 +10,7 @@ function unsubscribe(subscription) {
         if (typeof subscription == "function") {
             subscription();
         }
-        else {
+        else if (!("closed" in subscription) || !subscription.closed) {
             subscription.unsubscribe();
         }
     }
