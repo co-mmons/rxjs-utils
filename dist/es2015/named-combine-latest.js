@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.namedCombineLatest = void 0;
 const rxjs_1 = require("rxjs");
 const operators_1 = require("rxjs/operators");
 function namedCombineLatest(namedObservables) {

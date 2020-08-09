@@ -13,7 +13,7 @@ export declare class ObservableCache<T = any> {
     observable(): Observable<T>;
     protected pushObserver(observer: Observer<T>): void;
     protected pullObserver(observer: Observer<T>): void;
-    protected readonly initialized: boolean;
+    protected get initialized(): boolean;
     protected initialize(): void;
     protected destroySource(): void;
     protected onSourceNext(value: T): void;

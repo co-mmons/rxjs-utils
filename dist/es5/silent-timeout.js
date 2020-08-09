@@ -1,10 +1,14 @@
-import { __extends } from "tslib";
-import { Subscriber } from "rxjs";
-export function silentTimeout(timeout, onTimeout) {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.silentTimeout = void 0;
+var tslib_1 = require("tslib");
+var rxjs_1 = require("rxjs");
+function silentTimeout(timeout, onTimeout) {
     return function (source) {
         return source.lift(new SilentTimeoutOperator(timeout, onTimeout));
     };
 }
+exports.silentTimeout = silentTimeout;
 var SilentTimeoutOperator = /** @class */ (function () {
     function SilentTimeoutOperator(timeout, timeoutCallback) {
         this.timeout = timeout;
@@ -16,7 +20,7 @@ var SilentTimeoutOperator = /** @class */ (function () {
     return SilentTimeoutOperator;
 }());
 var SilentTimeoutSubscriber = /** @class */ (function (_super) {
-    __extends(SilentTimeoutSubscriber, _super);
+    tslib_1.__extends(SilentTimeoutSubscriber, _super);
     function SilentTimeoutSubscriber(destination, timeout, timeoutCallback) {
         var _this = _super.call(this, destination) || this;
         _this.timeoutCallback = timeoutCallback;
@@ -53,5 +57,5 @@ var SilentTimeoutSubscriber = /** @class */ (function (_super) {
         _super.prototype.unsubscribe.call(this);
     };
     return SilentTimeoutSubscriber;
-}(Subscriber));
+}(rxjs_1.Subscriber));
 //# sourceMappingURL=silent-timeout.js.map

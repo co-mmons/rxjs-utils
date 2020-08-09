@@ -1,7 +1,10 @@
-import { __extends } from "tslib";
-import { Subject } from "rxjs";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.pausableInterval = void 0;
+var tslib_1 = require("tslib");
+var rxjs_1 = require("rxjs");
 var PausableInterval = /** @class */ (function (_super) {
-    __extends(PausableInterval, _super);
+    tslib_1.__extends(PausableInterval, _super);
     function PausableInterval(interval, pause, resume) {
         var _this = _super.call(this) || this;
         _this.interval = interval;
@@ -58,8 +61,9 @@ var PausableInterval = /** @class */ (function (_super) {
         this.next();
     };
     return PausableInterval;
-}(Subject));
-export function pausableInterval(interval, pause, resume) {
+}(rxjs_1.Subject));
+function pausableInterval(interval, pause, resume) {
     return new PausableInterval(interval, pause, resume);
 }
+exports.pausableInterval = pausableInterval;
 //# sourceMappingURL=pausable-interval.js.map

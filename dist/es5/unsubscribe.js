@@ -1,8 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.unsubscribe = void 0;
 function unsubscribe(subscription) {
     if (Array.isArray(subscription)) {
-        for (let s of subscription) {
+        for (var _i = 0, subscription_1 = subscription; _i < subscription_1.length; _i++) {
+            var s = subscription_1[_i];
             unsubscribe(s);
         }
     }

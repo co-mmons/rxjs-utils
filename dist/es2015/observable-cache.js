@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ObservableCache = void 0;
 const fast_equals_1 = require("fast-equals");
 const rxjs_1 = require("rxjs");
 class CachedObservable extends rxjs_1.Subject {

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.pausableInterval = void 0;
 const rxjs_1 = require("rxjs");
 class PausableInterval extends rxjs_1.Subject {
     constructor(interval, pause, resume) {

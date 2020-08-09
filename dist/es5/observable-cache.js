@@ -1,8 +1,11 @@
-import { __extends } from "tslib";
-import { deepEqual } from "fast-equals";
-import { Subject, Subscription } from "rxjs";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ObservableCache = void 0;
+var tslib_1 = require("tslib");
+var fast_equals_1 = require("fast-equals");
+var rxjs_1 = require("rxjs");
 var CachedObservable = /** @class */ (function (_super) {
-    __extends(CachedObservable, _super);
+    tslib_1.__extends(CachedObservable, _super);
     function CachedObservable(factory) {
         var _this = _super.call(this) || this;
         _this.factory = factory;
@@ -19,7 +22,7 @@ var CachedObservable = /** @class */ (function (_super) {
             else if (this.factory["hasValue"]) {
                 subscriber.next(this.factory["value"]);
             }
-            var niu = new Subscription(function () { return _this.subscriptionClosed(); });
+            var niu = new rxjs_1.Subscription(function () { return _this.subscriptionClosed(); });
             niu.add(subscription);
             subscription = niu;
         }
@@ -33,7 +36,7 @@ var CachedObservable = /** @class */ (function (_super) {
         this.subscriptionClosed();
     };
     return CachedObservable;
-}(Subject));
+}(rxjs_1.Subject));
 var ObservableCache = /** @class */ (function () {
     function ObservableCache(sourceFactory, id) {
         this.sourceFactory = sourceFactory;
@@ -97,7 +100,7 @@ var ObservableCache = /** @class */ (function () {
         this.hasValue = false;
     };
     ObservableCache.prototype.onSourceNext = function (value) {
-        var changed = !this.hasValue || !this._checkEquality ? true : !deepEqual(value, this.value);
+        var changed = !this.hasValue || !this._checkEquality ? true : !fast_equals_1.deepEqual(value, this.value);
         this.hasValue = true;
         this.value = value;
         var observers = this.observers.slice();
@@ -154,5 +157,5 @@ var ObservableCache = /** @class */ (function () {
     };
     return ObservableCache;
 }());
-export { ObservableCache };
+exports.ObservableCache = ObservableCache;
 //# sourceMappingURL=observable-cache.js.map
