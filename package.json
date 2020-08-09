@@ -6,8 +6,8 @@
   "license": "MIT",
   "scripts": {
     "install": "node-utils-npm-install-dist",
-    "build": "node-utils-file-system-glob-delete \"dist/**/*\" && npm run build:es5 && npm run build:esm5 && npm run build:es2015 && npm run build:esm2015",
-    "build:es5": "tsc -p tsconfig.json -m commonjs -t es5 --outDir dist/es5",
+    "build": "node-utils-file-system-glob-delete \"dist/**/*\" && tsc --emitDeclarationOnly && npm run build:es5 && npm run build:esm5 && npm run build:es2015 && npm run build:esm2015",
+    "build:es5": "tsc -p tsconfig.json -d false -m commonjs -t es5 --outDir dist/es5",
     "build:esm5": "tsc -p tsconfig.json -d false -m es2015 -t es5 --outDir dist/esm5",
     "build:esm2015": "tsc -p tsconfig.json -d false -m es2015 -t es2015 --outDir dist/esm2015",
     "build:es2015": "tsc -p tsconfig.json -d false -m commonjs -t es2015 --outDir dist/es2015"
