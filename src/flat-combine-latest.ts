@@ -1,6 +1,6 @@
 import {Observable, ObservableInput, combineLatest} from "rxjs";
 import {map} from "rxjs/operators";
-import * as flatten from "arr-flatten";
+import flatten from "arr-flatten";
 
 export function flatCombineLatest<T>(...observables: ObservableInput<T[]>[]): Observable<T[]>;
 

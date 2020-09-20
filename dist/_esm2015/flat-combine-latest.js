@@ -1,6 +1,6 @@
 import { combineLatest } from "rxjs";
 import { map } from "rxjs/operators";
-import * as flatten from "arr-flatten";
+import flatten from "arr-flatten";
 export function flatCombineLatest(...observables) {
     // if the first and only other argument besides the resultSelector is an array
     // assume it's been called with `concatLatest([obs1, obs2, obs3], project)`
