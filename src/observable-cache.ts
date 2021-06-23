@@ -17,8 +17,8 @@ class CachedObservable<T> extends Subject<T> {
             if (!this.factory["initialized"]) {
                 this.factory["initialize"]();
 
-            } else if (this.factory["hasValue"]) {
-                subscriber.next(this.factory["value"]);
+            } else if (this.factory["_hasValue"]) {
+                subscriber.next(this.factory["_value"]);
             }
 
             let niu = new Subscription(() => this.subscriptionClosed());
@@ -44,19 +44,18 @@ export class ObservableCache<T = any> {
     constructor(protected readonly sourceFactory: () => Observable<T>, public readonly id?: any) {
     }
 
-    
+
     protected source: Observable<T>;
 
     protected sourceSubscription: Subscription;
 
-    protected value: any;
+    protected _value: any;
 
-    protected hasValue: boolean = false;
+    protected _hasValue: boolean = false;
 
     private observers: Observer<T>[] = [];
 
     private _checkEquality: boolean = true;
-
 
     public setCheckEquality(value: boolean): this {
         this._checkEquality = value;
@@ -65,6 +64,14 @@ export class ObservableCache<T = any> {
 
     public observable(): Observable<T> {
         return new CachedObservable(this);
+    }
+
+    hasValue() {
+        return !!this._hasValue;
+    }
+
+    value() {
+        return this._value;
     }
 
     protected pushObserver(observer: Observer<T>) {
@@ -103,8 +110,8 @@ export class ObservableCache<T = any> {
 
         if (!this.source) {
             this.source = this.sourceFactory();
-            this.value = undefined;
-            this.hasValue = false;
+            this._value = undefined;
+            this._hasValue = false;
             this.sourceSubscription = this.source.subscribe(value => this.onSourceNext(value), error => this.onSourceError(error), () => this.onSourceComplete());
         }
     }
@@ -117,15 +124,15 @@ export class ObservableCache<T = any> {
 
         this.sourceSubscription = undefined;
         this.source = undefined;
-        this.value = undefined;
-        this.hasValue = false;
+        this._value = undefined;
+        this._hasValue = false;
     }
 
     protected onSourceNext(value: T) {
-        let changed = !this.hasValue || !this._checkEquality ? true : !deepEqual(value, this.value);
+        let changed = !this._hasValue || !this._checkEquality ? true : !deepEqual(value, this._value);
 
-        this.hasValue = true;
-        this.value = value;
+        this._hasValue = true;
+        this._value = value;
 
         let observers = this.observers.slice();
         if (observers.length && changed) {
@@ -164,7 +171,7 @@ export class ObservableCache<T = any> {
 
     public destroy() {
         this.destroySource();
-        
+
         let observers = this.observers.slice();
         if (observers.length) {
             for (let o of observers) {

@@ -12,8 +12,8 @@ class CachedObservable extends Subject {
             if (!this.factory["initialized"]) {
                 this.factory["initialize"]();
             }
-            else if (this.factory["hasValue"]) {
-                subscriber.next(this.factory["value"]);
+            else if (this.factory["_hasValue"]) {
+                subscriber.next(this.factory["_value"]);
             }
             let niu = new Subscription(() => this.subscriptionClosed());
             niu.add(subscription);
@@ -33,7 +33,7 @@ export class ObservableCache {
     constructor(sourceFactory, id) {
         this.sourceFactory = sourceFactory;
         this.id = id;
-        this.hasValue = false;
+        this._hasValue = false;
         this.observers = [];
         this._checkEquality = true;
     }
@@ -43,6 +43,12 @@ export class ObservableCache {
     }
     observable() {
         return new CachedObservable(this);
+    }
+    hasValue() {
+        return !!this._hasValue;
+    }
+    value() {
+        return this._value;
     }
     pushObserver(observer) {
         for (let o of this.observers) {
@@ -71,8 +77,8 @@ export class ObservableCache {
     initialize() {
         if (!this.source) {
             this.source = this.sourceFactory();
-            this.value = undefined;
-            this.hasValue = false;
+            this._value = undefined;
+            this._hasValue = false;
             this.sourceSubscription = this.source.subscribe(value => this.onSourceNext(value), error => this.onSourceError(error), () => this.onSourceComplete());
         }
     }
@@ -82,13 +88,13 @@ export class ObservableCache {
         }
         this.sourceSubscription = undefined;
         this.source = undefined;
-        this.value = undefined;
-        this.hasValue = false;
+        this._value = undefined;
+        this._hasValue = false;
     }
     onSourceNext(value) {
-        let changed = !this.hasValue || !this._checkEquality ? true : !deepEqual(value, this.value);
-        this.hasValue = true;
-        this.value = value;
+        let changed = !this._hasValue || !this._checkEquality ? true : !deepEqual(value, this._value);
+        this._hasValue = true;
+        this._value = value;
         let observers = this.observers.slice();
         if (observers.length && changed) {
             for (let o of observers) {

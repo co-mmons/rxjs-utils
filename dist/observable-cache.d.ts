@@ -5,12 +5,14 @@ export declare class ObservableCache<T = any> {
     constructor(sourceFactory: () => Observable<T>, id?: any);
     protected source: Observable<T>;
     protected sourceSubscription: Subscription;
-    protected value: any;
-    protected hasValue: boolean;
+    protected _value: any;
+    protected _hasValue: boolean;
     private observers;
     private _checkEquality;
     setCheckEquality(value: boolean): this;
     observable(): Observable<T>;
+    hasValue(): boolean;
+    value(): any;
     protected pushObserver(observer: Observer<T>): void;
     protected pullObserver(observer: Observer<T>): void;
     protected get initialized(): boolean;
