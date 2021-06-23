@@ -70,7 +70,7 @@ export class ObservableCache<T = any> {
         return !!this._hasValue;
     }
 
-    value() {
+    value(): T {
         return this._value;
     }
 

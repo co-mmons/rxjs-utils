@@ -12,7 +12,7 @@ export declare class ObservableCache<T = any> {
     setCheckEquality(value: boolean): this;
     observable(): Observable<T>;
     hasValue(): boolean;
-    value(): any;
+    value(): T;
     protected pushObserver(observer: Observer<T>): void;
     protected pullObserver(observer: Observer<T>): void;
     protected get initialized(): boolean;
