@@ -74,6 +74,16 @@ export class ObservableCache<T = any> {
         return this._value;
     }
 
+    refresh() {
+
+        if (this.sourceSubscription) {
+            this.sourceSubscription.unsubscribe();
+        }
+
+        this.source = this.sourceFactory();
+        this.sourceSubscription = this.source.subscribe(value => this.onSourceNext(value), error => this.onSourceError(error), () => this.onSourceComplete());
+    }
+
     protected pushObserver(observer: Observer<T>) {
 
         for (let o of this.observers) {
@@ -109,10 +119,9 @@ export class ObservableCache<T = any> {
     protected initialize() {
 
         if (!this.source) {
-            this.source = this.sourceFactory();
             this._value = undefined;
             this._hasValue = false;
-            this.sourceSubscription = this.source.subscribe(value => this.onSourceNext(value), error => this.onSourceError(error), () => this.onSourceComplete());
+            this.refresh();
         }
     }
 
