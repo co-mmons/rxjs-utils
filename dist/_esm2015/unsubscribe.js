@@ -12,5 +12,6 @@ export function unsubscribe(subscription) {
             subscription.unsubscribe();
         }
     }
+    return undefined;
 }
 //# sourceMappingURL=unsubscribe.js.map

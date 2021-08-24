@@ -2,7 +2,7 @@ import {Subject, Subscription} from "rxjs";
 
 export type Unsubscribable = Function | Subscription | Subject<any> | {unsubscribe: () => any};
 
-export function unsubscribe(subscription: Unsubscribable | Unsubscribable[]) {
+export function unsubscribe(subscription: Unsubscribable | Unsubscribable[]): undefined {
 
     if (Array.isArray(subscription)) {
 
@@ -18,4 +18,6 @@ export function unsubscribe(subscription: Unsubscribable | Unsubscribable[]) {
             subscription.unsubscribe();
         }
     }
+
+    return undefined;
 }
