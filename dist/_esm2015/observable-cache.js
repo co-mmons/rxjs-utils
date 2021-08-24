@@ -53,9 +53,12 @@ export class ObservableCache {
     refresh() {
         if (this.sourceSubscription) {
             this.sourceSubscription.unsubscribe();
+            this.sourceSubscription = undefined;
         }
         this.source = this.sourceFactory();
-        this.sourceSubscription = this.source.subscribe(value => this.onSourceNext(value), error => this.onSourceError(error), () => this.onSourceComplete());
+        if (this.observers.length > 0) {
+            this.sourceSubscription = this.source.subscribe(value => this.onSourceNext(value), error => this.onSourceError(error), () => this.onSourceComplete());
+        }
     }
     pushObserver(observer) {
         for (let o of this.observers) {
