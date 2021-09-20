@@ -74,6 +74,10 @@ export class ObservableCache<T = any> {
         return this._value;
     }
 
+    get observersCount() {
+        return this.observers.length;
+    }
+
     refresh() {
 
         if (this.sourceSubscription) {

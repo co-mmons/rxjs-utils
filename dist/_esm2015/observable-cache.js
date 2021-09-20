@@ -50,6 +50,9 @@ export class ObservableCache {
     value() {
         return this._value;
     }
+    get observersCount() {
+        return this.observers.length;
+    }
     refresh() {
         if (this.sourceSubscription) {
             this.sourceSubscription.unsubscribe();
