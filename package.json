@@ -16,10 +16,10 @@
     "fast-equals": "^2.0.0"
   },
   "peerDependencies": {
-    "rxjs": "^6.6.2"
+    "rxjs": "^7.4.0"
   },
   "devDependencies": {
-    "rxjs": "^6.6.2",
+    "rxjs": "^7.4.0",
     "typescript": "^3.9.7"
   },
   "sideEffects": false,
