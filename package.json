@@ -1,6 +1,6 @@
 {
   "name": "@co.mmons/rxjs-utils",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "author": "co.mmons",
   "private": false,
   "license": "MIT",
@@ -13,14 +13,14 @@
   "dependencies": {
     "@co.mmons/node-utils": "git+https://github.com/co-mmons/node-utils.git",
     "arr-flatten": "^1.1.0",
-    "fast-equals": "^2.0.0"
+    "fast-equals": "^3.0.0"
   },
   "peerDependencies": {
     "rxjs": "^7.4.0"
   },
   "devDependencies": {
     "rxjs": "^7.4.0",
-    "typescript": "^3.9.7"
+    "typescript": "^4.5.4"
   },
   "sideEffects": false,
   "main": "./index.js",
