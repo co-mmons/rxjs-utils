@@ -16,4 +16,4 @@ export function namedCombineLatest(namedObservables) {
         return namedResult;
     }));
 }
-//# sourceMappingURL=named-combine-latest.js.map
+//# sourceMappingURL=namedCombineLatest.js.map

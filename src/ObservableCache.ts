@@ -8,7 +8,7 @@ class CachedObservable<T> extends Subject<T> {
     }
 
     _trySubscribe(subscriber: Subscriber<T>): TeardownLogic {
-        let subscription: TeardownLogic = super._trySubscribe(subscriber);
+        let subscription: TeardownLogic = super["_trySubscribe"](subscriber);
 
         if (subscription && !(<SubscriptionLike>subscription).closed) {
 
@@ -204,7 +204,7 @@ export class ObservableCache<T = any> {
     public subscribe(next?: (value: T) => void, error?: (error: any) => void, complete?: () => void): Subscription;
 
     public subscribe(observerOrNext?: PartialObserver<T> | ((value: T) => void), error?: (error: any) => void, complete?: () => void): Subscription {
-        if (typeof observerOrNext == "function") {
+        if (typeof observerOrNext === "function") {
             return this.observable().subscribe(observerOrNext, error, complete);
         } else {
             return this.observable().subscribe(observerOrNext);

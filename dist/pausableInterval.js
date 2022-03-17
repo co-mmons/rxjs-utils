@@ -1,5 +1,8 @@
-import { Subject } from "rxjs";
-class PausableInterval extends Subject {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.pausableInterval = void 0;
+const rxjs_1 = require("rxjs");
+class PausableInterval extends rxjs_1.Subject {
     constructor(interval, pause, resume) {
         super();
         this.interval = interval;
@@ -25,7 +28,7 @@ class PausableInterval extends Subject {
     }
     _subscribe(subscriber) {
         this.startTimer();
-        return super._subscribe(subscriber);
+        return super["_subscribe"](subscriber);
     }
     unsubscribe() {
         this.stopTimer();
@@ -44,17 +47,18 @@ class PausableInterval extends Subject {
             this.stopTimer();
             return;
         }
-        this.next();
+        this.next(undefined);
     }
     paused() {
         this.stopTimer();
     }
     resumed() {
         this.startTimer();
-        this.next();
+        this.next(undefined);
     }
 }
-export function pausableInterval(interval, pause, resume) {
+function pausableInterval(interval, pause, resume) {
     return new PausableInterval(interval, pause, resume);
 }
-//# sourceMappingURL=pausable-interval.js.map
+exports.pausableInterval = pausableInterval;
+//# sourceMappingURL=pausableInterval.js.map

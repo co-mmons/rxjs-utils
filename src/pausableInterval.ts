@@ -29,7 +29,7 @@ class PausableInterval extends Subject<any> {
 
     _subscribe(subscriber: Subscriber<any>): Subscription {
         this.startTimer();
-        return super._subscribe(subscriber);
+        return super["_subscribe"](subscriber);
     }
 
     unsubscribe(): void {
@@ -55,7 +55,7 @@ class PausableInterval extends Subject<any> {
             return;
         }
         
-        this.next();
+        this.next(undefined);
     }
 
     private paused() {
@@ -64,7 +64,7 @@ class PausableInterval extends Subject<any> {
 
     private resumed() {
         this.startTimer();
-        this.next();
+        this.next(undefined);
     }
 
     private pauseSubscription: Subscription;

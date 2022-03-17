@@ -1,12 +1,15 @@
-import { deepEqual } from "fast-equals";
-import { Subject, Subscription } from "rxjs";
-class CachedObservable extends Subject {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ObservableCache = void 0;
+const fast_equals_1 = require("fast-equals");
+const rxjs_1 = require("rxjs");
+class CachedObservable extends rxjs_1.Subject {
     constructor(factory) {
         super();
         this.factory = factory;
     }
     _trySubscribe(subscriber) {
-        let subscription = super._trySubscribe(subscriber);
+        let subscription = super["_trySubscribe"](subscriber);
         if (subscription && !subscription.closed) {
             this.factory["pushObserver"](this);
             if (!this.factory["initialized"]) {
@@ -15,7 +18,7 @@ class CachedObservable extends Subject {
             else if (this.factory["_hasValue"]) {
                 subscriber.next(this.factory["_value"]);
             }
-            let niu = new Subscription(() => this.subscriptionClosed());
+            let niu = new rxjs_1.Subscription(() => this.subscriptionClosed());
             niu.add(subscription);
             subscription = niu;
         }
@@ -29,7 +32,7 @@ class CachedObservable extends Subject {
         this.subscriptionClosed();
     }
 }
-export class ObservableCache {
+class ObservableCache {
     constructor(sourceFactory, id) {
         this.sourceFactory = sourceFactory;
         this.id = id;
@@ -104,7 +107,7 @@ export class ObservableCache {
         this._hasValue = false;
     }
     onSourceNext(value) {
-        let changed = !this._hasValue || !this._checkEquality ? true : !deepEqual(value, this._value);
+        let changed = !this._hasValue || !this._checkEquality ? true : !(0, fast_equals_1.deepEqual)(value, this._value);
         this._hasValue = true;
         this._value = value;
         let observers = this.observers.slice();
@@ -145,7 +148,7 @@ export class ObservableCache {
         this.observers.length = 0;
     }
     subscribe(observerOrNext, error, complete) {
-        if (typeof observerOrNext == "function") {
+        if (typeof observerOrNext === "function") {
             return this.observable().subscribe(observerOrNext, error, complete);
         }
         else {
@@ -156,4 +159,5 @@ export class ObservableCache {
         this.destroy();
     }
 }
-//# sourceMappingURL=observable-cache.js.map
+exports.ObservableCache = ObservableCache;
+//# sourceMappingURL=ObservableCache.js.map

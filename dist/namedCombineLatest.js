@@ -11,7 +11,7 @@ function namedCombineLatest(namedObservables) {
         keyByIndex[++index] = key;
         observables.push(namedObservables[key]);
     }
-    return rxjs_1.combineLatest(observables).pipe(operators_1.map(result => {
+    return (0, rxjs_1.combineLatest)(observables).pipe((0, operators_1.map)(result => {
         let namedResult = {};
         for (let i = 0; i < result.length; i++) {
             namedResult[keyByIndex[i]] = result[i];
@@ -20,4 +20,4 @@ function namedCombineLatest(namedObservables) {
     }));
 }
 exports.namedCombineLatest = namedCombineLatest;
-//# sourceMappingURL=named-combine-latest.js.map
+//# sourceMappingURL=namedCombineLatest.js.map

@@ -1,6 +1,6 @@
-export { flatCombineLatest } from "./flat-combine-latest";
-export { namedCombineLatest } from "./named-combine-latest";
-export { ObservableCache } from "./observable-cache";
-export { pausableInterval } from "./pausable-interval";
-export { silentTimeout } from "./silent-timeout";
+export { flatCombineLatest } from "./flatCombineLatest";
+export { namedCombineLatest } from "./namedCombineLatest";
+export { ObservableCache } from "./observableCache";
+export { pausableInterval } from "./pausableInterval";
+export { silentTimeout } from "./silentTimeout";
 export { unsubscribe, Unsubscribable } from "./unsubscribe";

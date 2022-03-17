@@ -14,4 +14,4 @@ export function flatCombineLatest(...observables) {
         return [];
     }));
 }
-//# sourceMappingURL=flat-combine-latest.js.map
+//# sourceMappingURL=flatCombineLatest.js.map
