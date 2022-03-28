@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@co.mmons/node-utils": "git+https://github.com/co-mmons/node-utils.git",
-    "arr-flatten": "^1.1.0",
+    "arr-flatten": "^1.1.0"
   },
   "peerDependencies": {
     "rxjs": "^7.4.0",
