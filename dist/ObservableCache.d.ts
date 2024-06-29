@@ -1,5 +1,6 @@
 import { Observable, Subscription, Observer, PartialObserver } from "rxjs";
 export declare class ObservableCache<T = any> {
+    #private;
     protected readonly sourceFactory: () => Observable<T>;
     readonly id?: any;
     constructor(sourceFactory: () => Observable<T>, id?: any);
@@ -13,6 +14,10 @@ export declare class ObservableCache<T = any> {
     observable(): Observable<T>;
     hasValue(): boolean;
     value(): T;
+    set keepValue(keepValue: boolean);
+    get keepValue(): boolean;
+    set keepAlive(value: boolean);
+    get keepAlive(): boolean;
     get observersCount(): number;
     refresh(): void;
     protected pushObserver(observer: Observer<T>): void;

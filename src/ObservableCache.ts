@@ -74,6 +74,30 @@ export class ObservableCache<T = any> {
         return this._value;
     }
 
+    #keepValue: boolean = false;
+
+    set keepValue(keepValue: boolean) {
+        this.#keepValue = !!keepValue;
+    }
+
+    get keepValue() {
+        return this.#keepValue;
+    }
+
+    #keepAlive: boolean = false;
+
+    set keepAlive(value: boolean) {
+        this.#keepAlive = !!value;
+
+        if (!value && this.observers.length === 0) {
+            this.destroySource();
+        }
+    }
+
+    get keepAlive() {
+        return this.#keepAlive;
+    }
+
     get observersCount() {
         return this.observers.length;
     }
@@ -87,7 +111,7 @@ export class ObservableCache<T = any> {
 
         this.source = this.sourceFactory();
 
-        if (this.observers.length > 0) {
+        if (this.observers.length > 0 || this.#keepAlive) {
             this.sourceSubscription = this.source.subscribe(value => this.onSourceNext(value), error => this.onSourceError(error), () => this.onSourceComplete());
         }
     }
@@ -110,7 +134,7 @@ export class ObservableCache<T = any> {
             }
         }
 
-        if (this.observers.length === 0) {
+        if (this.observers.length === 0 || this.#keepAlive) {
             this.destroySource();
         }
     }
@@ -141,8 +165,11 @@ export class ObservableCache<T = any> {
 
         this.sourceSubscription = undefined;
         this.source = undefined;
-        this._value = undefined;
-        this._hasValue = false;
+
+        if (!this.keepValue) {
+            this._value = undefined;
+            this._hasValue = false;
+        }
     }
 
     protected onSourceNext(value: T) {
