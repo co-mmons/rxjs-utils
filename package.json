@@ -11,12 +11,13 @@
     "build:esm2015": "tsc -p tsconfig.json -d false -m es2015 -t es2015 --outDir dist/_esm2015"
   },
   "dependencies": {
-    "@co.mmons/node-utils": "git+https://github.com/co-mmons/node-utils.git",
     "arr-flatten": "^1.1.0",
     "fast-equals": "^3.0.0"
+    "@co.mmons/node-utils": "github:co-mmons/node-utils"
   },
   "peerDependencies": {
-    "rxjs": "^7.4.0"
+    "rxjs": "^7.4.0",
+    "fast-equals": "^3.0.0"
   },
   "devDependencies": {
     "rxjs": "^7.4.0",
