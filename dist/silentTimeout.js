@@ -1,9 +1,13 @@
-import { Subscriber } from "rxjs";
-export function silentTimeout(timeout, onTimeout) {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.silentTimeout = void 0;
+const rxjs_1 = require("rxjs");
+function silentTimeout(timeout, onTimeout) {
     return function (source) {
         return source.lift(new SilentTimeoutOperator(timeout, onTimeout));
     };
 }
+exports.silentTimeout = silentTimeout;
 class SilentTimeoutOperator {
     constructor(timeout, timeoutCallback) {
         this.timeout = timeout;
@@ -13,7 +17,7 @@ class SilentTimeoutOperator {
         return source.subscribe(new SilentTimeoutSubscriber(subscriber, this.timeout, this.timeoutCallback));
     }
 }
-class SilentTimeoutSubscriber extends Subscriber {
+class SilentTimeoutSubscriber extends rxjs_1.Subscriber {
     constructor(destination, timeout, timeoutCallback) {
         super(destination);
         this.timeoutCallback = timeoutCallback;
@@ -49,4 +53,4 @@ class SilentTimeoutSubscriber extends Subscriber {
         super.unsubscribe();
     }
 }
-//# sourceMappingURL=silent-timeout.js.map
+//# sourceMappingURL=silentTimeout.js.map

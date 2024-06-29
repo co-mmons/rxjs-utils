@@ -1,60 +1,80 @@
-import { Subject } from "rxjs";
-class PausableInterval extends Subject {
-    constructor(interval, pause, resume) {
+import {Subject, Subscription, Subscriber, Observable} from "rxjs";
+
+class PausableInterval extends Subject<any> {
+
+    constructor(private interval: number, private pause: Observable<any>, private resume: Observable<any>) {
         super();
-        this.interval = interval;
-        this.pause = pause;
-        this.resume = resume;
     }
-    startTimer() {
+
+    private startTimer() {
         if (!this.timer) {
             this.timer = setInterval(() => this.onInterval(), this.interval);
+
             if (!this.pauseSubscription && this.pause) {
                 this.pauseSubscription = this.pause.subscribe(() => this.paused());
             }
+
             if (!this.resumeSubscription && this.resume) {
                 this.resumeSubscription = this.resume.subscribe(() => this.resumed());
             }
         }
     }
-    stopTimer() {
+
+    private stopTimer() {
         if (this.timer) {
             clearInterval(this.timer);
             this.timer = undefined;
         }
     }
-    _subscribe(subscriber) {
+
+    _subscribe(subscriber: Subscriber<any>): Subscription {
         this.startTimer();
-        return super._subscribe(subscriber);
+        return super["_subscribe"](subscriber);
     }
-    unsubscribe() {
+
+    unsubscribe(): void {
         this.stopTimer();
+        
         if (this.pauseSubscription) {
             this.pauseSubscription.unsubscribe();
             this.pauseSubscription = undefined;
         }
+
         if (this.resumeSubscription) {
             this.resumeSubscription.unsubscribe();
             this.resumeSubscription = undefined;
         }
+
         super.unsubscribe();
     }
-    onInterval() {
+
+    private onInterval() {
+
         if (this.observers.length == 0) {
             this.stopTimer();
             return;
         }
-        this.next();
+        
+        this.next(undefined);
     }
-    paused() {
+
+    private paused() {
         this.stopTimer();
     }
-    resumed() {
+
+    private resumed() {
         this.startTimer();
-        this.next();
+        this.next(undefined);
     }
+
+    private pauseSubscription: Subscription;
+
+    private resumeSubscription: Subscription;
+
+    private timer: any;
+
 }
-export function pausableInterval(interval, pause, resume) {
+
+export function pausableInterval(interval: number, pause: Observable<any>, resume: Observable<any>): Observable<any> {
     return new PausableInterval(interval, pause, resume);
 }
-//# sourceMappingURL=pausable-interval.js.map

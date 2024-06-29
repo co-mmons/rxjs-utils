@@ -1,3 +1,5 @@
+var _ObservableCache_keepValue, _ObservableCache_keepAlive;
+import { __classPrivateFieldGet, __classPrivateFieldSet } from "tslib";
 import { deepEqual } from "fast-equals";
 import { Subject, Subscription } from "rxjs";
 class CachedObservable extends Subject {
@@ -6,7 +8,7 @@ class CachedObservable extends Subject {
         this.factory = factory;
     }
     _trySubscribe(subscriber) {
-        let subscription = super._trySubscribe(subscriber);
+        let subscription = super["_trySubscribe"](subscriber);
         if (subscription && !subscription.closed) {
             this.factory["pushObserver"](this);
             if (!this.factory["initialized"]) {
@@ -36,6 +38,8 @@ export class ObservableCache {
         this._hasValue = false;
         this.observers = [];
         this._checkEquality = true;
+        _ObservableCache_keepValue.set(this, false);
+        _ObservableCache_keepAlive.set(this, false);
     }
     setCheckEquality(value) {
         this._checkEquality = value;
@@ -50,6 +54,21 @@ export class ObservableCache {
     value() {
         return this._value;
     }
+    set keepValue(keepValue) {
+        __classPrivateFieldSet(this, _ObservableCache_keepValue, !!keepValue, "f");
+    }
+    get keepValue() {
+        return __classPrivateFieldGet(this, _ObservableCache_keepValue, "f");
+    }
+    set keepAlive(value) {
+        __classPrivateFieldSet(this, _ObservableCache_keepAlive, !!value, "f");
+        if (!value && this.observers.length === 0) {
+            this.destroySource();
+        }
+    }
+    get keepAlive() {
+        return __classPrivateFieldGet(this, _ObservableCache_keepAlive, "f");
+    }
     get observersCount() {
         return this.observers.length;
     }
@@ -59,7 +78,7 @@ export class ObservableCache {
             this.sourceSubscription = undefined;
         }
         this.source = this.sourceFactory();
-        if (this.observers.length > 0) {
+        if (this.observers.length > 0 || __classPrivateFieldGet(this, _ObservableCache_keepAlive, "f")) {
             this.sourceSubscription = this.source.subscribe(value => this.onSourceNext(value), error => this.onSourceError(error), () => this.onSourceComplete());
         }
     }
@@ -77,7 +96,7 @@ export class ObservableCache {
                 this.observers.splice(i, 1);
             }
         }
-        if (this.observers.length === 0) {
+        if (this.observers.length === 0 || __classPrivateFieldGet(this, _ObservableCache_keepAlive, "f")) {
             this.destroySource();
         }
     }
@@ -100,8 +119,10 @@ export class ObservableCache {
         }
         this.sourceSubscription = undefined;
         this.source = undefined;
-        this._value = undefined;
-        this._hasValue = false;
+        if (!this.keepValue) {
+            this._value = undefined;
+            this._hasValue = false;
+        }
     }
     onSourceNext(value) {
         let changed = !this._hasValue || !this._checkEquality ? true : !deepEqual(value, this._value);
@@ -145,7 +166,7 @@ export class ObservableCache {
         this.observers.length = 0;
     }
     subscribe(observerOrNext, error, complete) {
-        if (typeof observerOrNext == "function") {
+        if (typeof observerOrNext === "function") {
             return this.observable().subscribe(observerOrNext, error, complete);
         }
         else {
@@ -156,4 +177,5 @@ export class ObservableCache {
         this.destroy();
     }
 }
-//# sourceMappingURL=observable-cache.js.map
+_ObservableCache_keepValue = new WeakMap(), _ObservableCache_keepAlive = new WeakMap();
+//# sourceMappingURL=ObservableCache.js.map
