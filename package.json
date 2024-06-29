@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "arr-flatten": "^1.1.0",
-    "fast-equals": "^3.0.0"
+    "fast-equals": "^3.0.0",
     "@co.mmons/node-utils": "github:co-mmons/node-utils"
   },
   "peerDependencies": {
