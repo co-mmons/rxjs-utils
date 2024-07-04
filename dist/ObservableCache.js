@@ -1,5 +1,5 @@
 "use strict";
-var _ObservableCache_keepValue, _ObservableCache_keepAlive;
+var _ObservableCache_checkEquality, _ObservableCache_keepValue, _ObservableCache_keepAlive;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ObservableCache = void 0;
 const tslib_1 = require("tslib");
@@ -35,17 +35,25 @@ class CachedObservable extends rxjs_1.Subject {
     }
 }
 class ObservableCache {
-    constructor(sourceFactory, id) {
+    constructor(sourceFactory, paramsOrId) {
         this.sourceFactory = sourceFactory;
-        this.id = id;
         this._hasValue = false;
         this.observers = [];
-        this._checkEquality = true;
+        _ObservableCache_checkEquality.set(this, true);
         _ObservableCache_keepValue.set(this, false);
         _ObservableCache_keepAlive.set(this, false);
+        if (typeof paramsOrId === "string") {
+            this.id = paramsOrId;
+        }
+        else if (paramsOrId) {
+            this.id = paramsOrId.id;
+            (0, tslib_1.__classPrivateFieldSet)(this, _ObservableCache_keepValue, paramsOrId.keepValue, "f");
+            (0, tslib_1.__classPrivateFieldSet)(this, _ObservableCache_keepAlive, paramsOrId.keepAlive, "f");
+            (0, tslib_1.__classPrivateFieldSet)(this, _ObservableCache_checkEquality, paramsOrId.checkEquality, "f");
+        }
     }
     setCheckEquality(value) {
-        this._checkEquality = value;
+        (0, tslib_1.__classPrivateFieldSet)(this, _ObservableCache_checkEquality, value, "f");
         return this;
     }
     observable() {
@@ -128,7 +136,7 @@ class ObservableCache {
         }
     }
     onSourceNext(value) {
-        let changed = !this._hasValue || !this._checkEquality ? true : !(0, fast_equals_1.deepEqual)(value, this._value);
+        let changed = !this._hasValue || !(0, tslib_1.__classPrivateFieldGet)(this, _ObservableCache_checkEquality, "f") ? true : !(0, fast_equals_1.deepEqual)(value, this._value);
         this._hasValue = true;
         this._value = value;
         let observers = this.observers.slice();
@@ -181,5 +189,5 @@ class ObservableCache {
     }
 }
 exports.ObservableCache = ObservableCache;
-_ObservableCache_keepValue = new WeakMap(), _ObservableCache_keepAlive = new WeakMap();
+_ObservableCache_checkEquality = new WeakMap(), _ObservableCache_keepValue = new WeakMap(), _ObservableCache_keepAlive = new WeakMap();
 //# sourceMappingURL=ObservableCache.js.map

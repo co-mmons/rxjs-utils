@@ -39,11 +39,28 @@ class CachedObservable<T> extends Subject<T> {
     }
 }
 
+interface ObservableCacheParams {
+    id?: string;
+    checkEquality?: boolean;
+    keepValue?: boolean;
+    keepAlive?: boolean;
+}
+
 export class ObservableCache<T = any> {
 
-    constructor(protected readonly sourceFactory: () => Observable<T>, public readonly id?: any) {
+    constructor(protected readonly sourceFactory: () => Observable<T>, paramsOrId?: ObservableCacheParams | string) {
+
+        if (typeof paramsOrId === "string") {
+            this.id = paramsOrId;
+        } else if (paramsOrId) {
+            this.id = paramsOrId.id;
+            this.#keepValue = paramsOrId.keepValue;
+            this.#keepAlive = paramsOrId.keepAlive;
+            this.#checkEquality = paramsOrId.checkEquality;
+        }
     }
 
+    public readonly id: string | undefined;
 
     protected source: Observable<T>;
 
@@ -55,10 +72,10 @@ export class ObservableCache<T = any> {
 
     private observers: Observer<T>[] = [];
 
-    private _checkEquality: boolean = true;
+    #checkEquality: boolean = true;
 
     public setCheckEquality(value: boolean): this {
-        this._checkEquality = value;
+        this.#checkEquality = value;
         return this;
     }
 
@@ -173,7 +190,7 @@ export class ObservableCache<T = any> {
     }
 
     protected onSourceNext(value: T) {
-        let changed = !this._hasValue || !this._checkEquality ? true : !deepEqual(value, this._value);
+        let changed = !this._hasValue || !this.#checkEquality ? true : !deepEqual(value, this._value);
 
         this._hasValue = true;
         this._value = value;

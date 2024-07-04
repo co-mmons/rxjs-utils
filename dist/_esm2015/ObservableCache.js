@@ -1,4 +1,4 @@
-var _ObservableCache_keepValue, _ObservableCache_keepAlive;
+var _ObservableCache_checkEquality, _ObservableCache_keepValue, _ObservableCache_keepAlive;
 import { __classPrivateFieldGet, __classPrivateFieldSet } from "tslib";
 import { deepEqual } from "fast-equals";
 import { Subject, Subscription } from "rxjs";
@@ -32,17 +32,25 @@ class CachedObservable extends Subject {
     }
 }
 export class ObservableCache {
-    constructor(sourceFactory, id) {
+    constructor(sourceFactory, paramsOrId) {
         this.sourceFactory = sourceFactory;
-        this.id = id;
         this._hasValue = false;
         this.observers = [];
-        this._checkEquality = true;
+        _ObservableCache_checkEquality.set(this, true);
         _ObservableCache_keepValue.set(this, false);
         _ObservableCache_keepAlive.set(this, false);
+        if (typeof paramsOrId === "string") {
+            this.id = paramsOrId;
+        }
+        else if (paramsOrId) {
+            this.id = paramsOrId.id;
+            __classPrivateFieldSet(this, _ObservableCache_keepValue, paramsOrId.keepValue, "f");
+            __classPrivateFieldSet(this, _ObservableCache_keepAlive, paramsOrId.keepAlive, "f");
+            __classPrivateFieldSet(this, _ObservableCache_checkEquality, paramsOrId.checkEquality, "f");
+        }
     }
     setCheckEquality(value) {
-        this._checkEquality = value;
+        __classPrivateFieldSet(this, _ObservableCache_checkEquality, value, "f");
         return this;
     }
     observable() {
@@ -125,7 +133,7 @@ export class ObservableCache {
         }
     }
     onSourceNext(value) {
-        let changed = !this._hasValue || !this._checkEquality ? true : !deepEqual(value, this._value);
+        let changed = !this._hasValue || !__classPrivateFieldGet(this, _ObservableCache_checkEquality, "f") ? true : !deepEqual(value, this._value);
         this._hasValue = true;
         this._value = value;
         let observers = this.observers.slice();
@@ -177,5 +185,5 @@ export class ObservableCache {
         this.destroy();
     }
 }
-_ObservableCache_keepValue = new WeakMap(), _ObservableCache_keepAlive = new WeakMap();
+_ObservableCache_checkEquality = new WeakMap(), _ObservableCache_keepValue = new WeakMap(), _ObservableCache_keepAlive = new WeakMap();
 //# sourceMappingURL=ObservableCache.js.map
