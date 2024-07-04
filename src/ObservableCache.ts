@@ -54,9 +54,18 @@ export class ObservableCache<T = any> {
             this.id = paramsOrId;
         } else if (paramsOrId) {
             this.id = paramsOrId.id;
-            this.#keepValue = paramsOrId.keepValue;
-            this.#keepAlive = paramsOrId.keepAlive;
-            this.#checkEquality = paramsOrId.checkEquality;
+
+            if (typeof paramsOrId.keepValue === "boolean") {
+                this.#keepValue = paramsOrId.keepValue;
+            }
+
+            if (typeof paramsOrId.keepAlive === "boolean") {
+                this.#keepAlive = paramsOrId.keepAlive;
+            }
+
+            if (typeof paramsOrId.checkEquality === "boolean") {
+                this.#checkEquality = paramsOrId.checkEquality;
+            }
         }
     }
 

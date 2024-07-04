@@ -47,9 +47,15 @@ class ObservableCache {
         }
         else if (paramsOrId) {
             this.id = paramsOrId.id;
-            (0, tslib_1.__classPrivateFieldSet)(this, _ObservableCache_keepValue, paramsOrId.keepValue, "f");
-            (0, tslib_1.__classPrivateFieldSet)(this, _ObservableCache_keepAlive, paramsOrId.keepAlive, "f");
-            (0, tslib_1.__classPrivateFieldSet)(this, _ObservableCache_checkEquality, paramsOrId.checkEquality, "f");
+            if (typeof paramsOrId.keepValue === "boolean") {
+                (0, tslib_1.__classPrivateFieldSet)(this, _ObservableCache_keepValue, paramsOrId.keepValue, "f");
+            }
+            if (typeof paramsOrId.keepAlive === "boolean") {
+                (0, tslib_1.__classPrivateFieldSet)(this, _ObservableCache_keepAlive, paramsOrId.keepAlive, "f");
+            }
+            if (typeof paramsOrId.checkEquality === "boolean") {
+                (0, tslib_1.__classPrivateFieldSet)(this, _ObservableCache_checkEquality, paramsOrId.checkEquality, "f");
+            }
         }
     }
     setCheckEquality(value) {
