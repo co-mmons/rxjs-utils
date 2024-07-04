@@ -39,8 +39,8 @@ class CachedObservable<T> extends Subject<T> {
     }
 }
 
-interface ObservableCacheParams {
-    id?: string;
+export interface ObservableCacheParams {
+    id?: string | symbol;
     checkEquality?: boolean;
     keepValue?: boolean;
     keepAlive?: boolean;
@@ -69,7 +69,7 @@ export class ObservableCache<T = any> {
         }
     }
 
-    public readonly id: string | undefined;
+    public readonly id: string | symbol | undefined;
 
     protected source: Observable<T>;
 

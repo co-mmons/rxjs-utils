@@ -1,6 +1,6 @@
 import { Observable, Subscription, Observer, PartialObserver } from "rxjs";
-interface ObservableCacheParams {
-    id?: string;
+export interface ObservableCacheParams {
+    id?: string | symbol;
     checkEquality?: boolean;
     keepValue?: boolean;
     keepAlive?: boolean;
@@ -9,7 +9,7 @@ export declare class ObservableCache<T = any> {
     #private;
     protected readonly sourceFactory: () => Observable<T>;
     constructor(sourceFactory: () => Observable<T>, paramsOrId?: ObservableCacheParams | string);
-    readonly id: string | undefined;
+    readonly id: string | symbol | undefined;
     protected source: Observable<T>;
     protected sourceSubscription: Subscription;
     protected _value: any;
@@ -38,4 +38,3 @@ export declare class ObservableCache<T = any> {
     subscribe(next?: (value: T) => void, error?: (error: any) => void, complete?: () => void): Subscription;
     unsubscribe(): void;
 }
-export {};
