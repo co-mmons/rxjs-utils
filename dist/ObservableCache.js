@@ -35,26 +35,27 @@ class CachedObservable extends rxjs_1.Subject {
     }
 }
 class ObservableCache {
-    constructor(sourceFactory, paramsOrId) {
-        this.sourceFactory = sourceFactory;
+    constructor(factoryOrParams, factoryOrParamsOrId) {
         this._hasValue = false;
         this.observers = [];
         _ObservableCache_checkEquality.set(this, true);
         _ObservableCache_keepValue.set(this, false);
         _ObservableCache_keepAlive.set(this, false);
-        if (typeof paramsOrId === "string") {
-            this.id = paramsOrId;
+        this.sourceFactory = typeof factoryOrParams === "function" ? factoryOrParams : factoryOrParamsOrId;
+        const params = typeof factoryOrParams === "object" ? factoryOrParams : (typeof factoryOrParamsOrId === "object" ? factoryOrParamsOrId : undefined);
+        if (typeof factoryOrParamsOrId === "string") {
+            this.id = factoryOrParamsOrId;
         }
-        else if (paramsOrId) {
-            this.id = paramsOrId.id;
-            if (typeof paramsOrId.keepValue === "boolean") {
-                (0, tslib_1.__classPrivateFieldSet)(this, _ObservableCache_keepValue, paramsOrId.keepValue, "f");
+        else if (params) {
+            this.id = params.id;
+            if (typeof params.keepValue === "boolean") {
+                (0, tslib_1.__classPrivateFieldSet)(this, _ObservableCache_keepValue, params.keepValue, "f");
             }
-            if (typeof paramsOrId.keepAlive === "boolean") {
-                (0, tslib_1.__classPrivateFieldSet)(this, _ObservableCache_keepAlive, paramsOrId.keepAlive, "f");
+            if (typeof params.keepAlive === "boolean") {
+                (0, tslib_1.__classPrivateFieldSet)(this, _ObservableCache_keepAlive, params.keepAlive, "f");
             }
-            if (typeof paramsOrId.checkEquality === "boolean") {
-                (0, tslib_1.__classPrivateFieldSet)(this, _ObservableCache_checkEquality, paramsOrId.checkEquality, "f");
+            if (typeof params.checkEquality === "boolean") {
+                (0, tslib_1.__classPrivateFieldSet)(this, _ObservableCache_checkEquality, params.checkEquality, "f");
             }
         }
     }

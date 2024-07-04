@@ -46,28 +46,46 @@ export interface ObservableCacheParams {
     keepAlive?: boolean;
 }
 
+export type ObservableCacheFactory<T> = () => Observable<T>;
+
 export class ObservableCache<T = any> {
 
-    constructor(protected readonly sourceFactory: () => Observable<T>, paramsOrId?: ObservableCacheParams | string) {
+    constructor(sourceFactory: ObservableCacheFactory<T>);
 
-        if (typeof paramsOrId === "string") {
-            this.id = paramsOrId;
-        } else if (paramsOrId) {
-            this.id = paramsOrId.id;
+    /**
+     * @deprecated
+     */
+    constructor(sourceFactory: ObservableCacheFactory<T>, paramsOrId: ObservableCacheParams | string);
 
-            if (typeof paramsOrId.keepValue === "boolean") {
-                this.#keepValue = paramsOrId.keepValue;
+    constructor(params: ObservableCacheParams, sourceFactory: ObservableCacheFactory<T>);
+
+    constructor(factoryOrParams: ObservableCacheFactory<T> | ObservableCacheParams, factoryOrParamsOrId?: ObservableCacheFactory<T> | ObservableCacheParams | string) {
+
+        this.sourceFactory = typeof factoryOrParams === "function" ? factoryOrParams : factoryOrParamsOrId as ObservableCacheFactory<T>;
+
+        const params = typeof factoryOrParams === "object" ? factoryOrParams : (typeof factoryOrParamsOrId === "object" ? factoryOrParamsOrId : undefined);
+
+        if (typeof factoryOrParamsOrId === "string") {
+            this.id = factoryOrParamsOrId;
+
+        } else if (params) {
+            this.id = params.id;
+
+            if (typeof params.keepValue === "boolean") {
+                this.#keepValue = params.keepValue;
             }
 
-            if (typeof paramsOrId.keepAlive === "boolean") {
-                this.#keepAlive = paramsOrId.keepAlive;
+            if (typeof params.keepAlive === "boolean") {
+                this.#keepAlive = params.keepAlive;
             }
 
-            if (typeof paramsOrId.checkEquality === "boolean") {
-                this.#checkEquality = paramsOrId.checkEquality;
+            if (typeof params.checkEquality === "boolean") {
+                this.#checkEquality = params.checkEquality;
             }
         }
     }
+
+    protected readonly sourceFactory: ObservableCacheFactory<T>;
 
     public readonly id: string | symbol | undefined;
 

@@ -5,10 +5,16 @@ export interface ObservableCacheParams {
     keepValue?: boolean;
     keepAlive?: boolean;
 }
+export declare type ObservableCacheFactory<T> = () => Observable<T>;
 export declare class ObservableCache<T = any> {
     #private;
-    protected readonly sourceFactory: () => Observable<T>;
-    constructor(sourceFactory: () => Observable<T>, paramsOrId?: ObservableCacheParams | string);
+    constructor(sourceFactory: ObservableCacheFactory<T>);
+    /**
+     * @deprecated
+     */
+    constructor(sourceFactory: ObservableCacheFactory<T>, paramsOrId: ObservableCacheParams | string);
+    constructor(params: ObservableCacheParams, sourceFactory: ObservableCacheFactory<T>);
+    protected readonly sourceFactory: ObservableCacheFactory<T>;
     readonly id: string | symbol | undefined;
     protected source: Observable<T>;
     protected sourceSubscription: Subscription;
